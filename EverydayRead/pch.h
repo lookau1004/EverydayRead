@@ -5,7 +5,7 @@
 //SDL
 #include <iostream>
 #include <string>
-#include <fstream>
+#include <vector>
 
 #include "rapidjson/include/rapidjson/document.h"
 #include "rapidjson/include/rapidjson/writer.h"

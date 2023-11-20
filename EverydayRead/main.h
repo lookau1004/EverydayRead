@@ -1,9 +1,10 @@
 #pragma once
 
 #include "CurlDriver.h"
+#include "JsonDriver.h"
 
 string curlResult;
-const char *_link = "https://raw.githubusercontent.com/rihyungame/tetris/main/Main.cpp";
+const char *_link = "https://raw.githubusercontent.com/rihyungame/EverydayRead/master/EverydayRead/guideline.json";
 
 #define TITLE L"EverydayRead"
 #define WIDTH 800
