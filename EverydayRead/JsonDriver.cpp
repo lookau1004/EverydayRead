@@ -4,7 +4,7 @@
 JsonDriver::JsonDriver(std::string _inputJson) : inputJson(_inputJson)
 {
 	jsonData = json::parse(inputJson);
-	sentences.push_back(jsonData.at("0"));
+	sentences = jsonData["cppguidelines"].get<std::vector<std::string>>();
 }
 
 JsonDriver::~JsonDriver()
