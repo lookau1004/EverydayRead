@@ -11,6 +11,9 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 
 	MSG msg = {};
 
+	CurlDriver curlDriver(_link);
+	curlResult = curlDriver.Load();
+
 	while (msg.message != WM_QUIT)
 	{
 		if (PeekMessage(&msg, NULL, 0, 0, PM_REMOVE))
@@ -40,7 +43,7 @@ HRESULT InitWindow(HINSTANCE hInstance, int nCmdShow)
 	wcex.lpszMenuName = NULL;
 	wcex.lpszClassName = TITLE;
 	wcex.hIconSm = LoadIcon(wcex.hInstance, MAKEINTRESOURCE(IDI_APPLICATION));
-	
+
 	if (!RegisterClassExW(&wcex))
 		return E_FAIL;
 
@@ -55,7 +58,7 @@ HRESULT InitWindow(HINSTANCE hInstance, int nCmdShow)
 	{
 		return E_FAIL;
 	}
-	
+
 	ShowWindow(g_hwnd, nCmdShow);
 
 	return S_OK;
@@ -69,12 +72,13 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 
 	switch (message)
 	{
-	case WM_PAINT :
+	case WM_PAINT:
 		hdc = BeginPaint(hWnd, &ps);
 		TextOut(hdc, 100, 100, L"¿À´ÃÀÇ ¸í¾ð", 6);
 		EndPaint(hWnd, &ps);
 		return 0;
-	case WM_DESTROY :
+
+	case WM_DESTROY:
 		PostQuitMessage(0);
 		return 0;
 	}
