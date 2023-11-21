@@ -1,24 +1,24 @@
 #include "pch.h"
-#include "CurlDriver.h"
+#include "GetHtml.h"
 
-CurlDriver::CurlDriver(const char *_link) : link(_link)
+GetHtml::GetHtml(const char* _link) : link(_link)
 {
 	curl_global_init(CURL_GLOBAL_DEFAULT);
 	curl = curl_easy_init();
 }
 
-CurlDriver::~CurlDriver()
+GetHtml::~GetHtml()
 {
 	curl_global_cleanup();
 }
 
-size_t CurlDriver::WriteCallback(void *contents, size_t size, size_t nmemb, std::string* data)
+size_t GetHtml::WriteCallback(void* contents, size_t size, size_t nmemb, std::string* data)
 {
 	data->append((char*)contents, size * nmemb);
 	return size * nmemb;
 }
 
-std::string CurlDriver::Load()
+std::string GetHtml::Load()
 {
 	if (curl)
 	{

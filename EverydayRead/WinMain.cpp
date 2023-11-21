@@ -1,21 +1,23 @@
 #include "pch.h"
-#include "main.h"
+#include "WinMain.h"
 
-int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
-	_In_opt_ HINSTANCE hPrevInstance,
-	_In_ LPWSTR lpCmdLine,
-	_In_ int nCmdShow)
+int APIENTRY wWinMain(_In_ HINSTANCE hInstance,	_In_opt_ HINSTANCE hPrevInstance,
+					  _In_ LPWSTR lpCmdLine,	_In_ int nCmdShow)
 {
+
+	GetHtml getHtml(_link);
+	curlResult = getHtml.Load();
+
+	JsonParse jsonParse(curlResult, sentences);
+	Random random(sentences, sentences.size());
+
+	sentence = random.GetSentence();
+
 	if (FAILED(InitWindow(hInstance, nCmdShow)))
 		return 0;
 
 	MSG msg = {};
-
-	CurlDriver curlDriver(_link);
-	curlResult = curlDriver.Load();
-
-	JsonDriver jsonDriver(curlResult);
-
+		
 	while (msg.message != WM_QUIT)
 	{
 		if (PeekMessage(&msg, NULL, 0, 0, PM_REMOVE))
@@ -52,9 +54,8 @@ HRESULT InitWindow(HINSTANCE hInstance, int nCmdShow)
 	AdjustWindowRect(&rc, WS_OVERLAPPEDWINDOW, FALSE);
 
 	g_hInst = hInstance;
-	g_hwnd = CreateWindowW(TITLE, TITLE, WS_OVERLAPPEDWINDOW,
-		CW_USEDEFAULT, CW_USEDEFAULT, rc.right - rc.left, rc.bottom - rc.top,
-		nullptr, nullptr, hInstance, nullptr);
+	g_hwnd = CreateWindowW(TITLE, TITLE, WS_OVERLAPPEDWINDOW, CW_USEDEFAULT, CW_USEDEFAULT, 
+		rc.right - rc.left, rc.bottom - rc.top, nullptr, nullptr, hInstance, nullptr);
 
 	if (!g_hwnd)
 	{
@@ -76,7 +77,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 	{
 	case WM_PAINT:
 		hdc = BeginPaint(hWnd, &ps);
-		TextOut(hdc, 100, 100, L"¿À´ÃÀÇ ¸í¾ð", 6);
+		TextOutA(hdc, 100, 100, sentence.c_str(), sentence.size());
 		EndPaint(hWnd, &ps);
 		return 0;
 

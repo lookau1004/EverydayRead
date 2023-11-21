@@ -132,18 +132,20 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="CurlDriver.h" />
-    <ClInclude Include="main.h" />
+    <ClInclude Include="GetHtml.h" />
+    <ClInclude Include="Random.h" />
+    <ClInclude Include="WinMain.h" />
     <ClInclude Include="pch.h" />
-    <ClInclude Include="JsonDriver.h" />
+    <ClInclude Include="JsonParse.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="CurlDriver.cpp" />
-    <ClCompile Include="main.cpp" />
+    <ClCompile Include="GetHtml.cpp" />
+    <ClCompile Include="Random.cpp" />
+    <ClCompile Include="WinMain.cpp" />
     <ClCompile Include="pch.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
     </ClCompile>
-    <ClCompile Include="JsonDriver.cpp" />
+    <ClCompile Include="JsonParse.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="guideline.json" />

@@ -1,11 +1,11 @@
 #pragma once
 #include <curl/curl.h>
 
-class CurlDriver
+class GetHtml
 {
 public:
-	CurlDriver(const char*);
-	~CurlDriver();
+	GetHtml(const char* _link);
+	~GetHtml();
 
 	string GetResult() { return readBuffer; }
 	static size_t WriteCallback(void* contents, size_t size, size_t nmemb, std::string* data);

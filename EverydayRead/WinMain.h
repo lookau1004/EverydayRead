@@ -1,10 +1,14 @@
 #pragma once
 
-#include "CurlDriver.h"
-#include "JsonDriver.h"
+#include "GetHtml.h"
+#include "JsonParse.h"
+#include "Random.h"
 
 string curlResult;
-const char *_link = "https://raw.githubusercontent.com/rihyungame/EverydayRead/master/EverydayRead/guideline.json";
+const char* _link = "https://raw.githubusercontent.com/rihyungame/EverydayRead/master/EverydayRead/guideline.json";
+
+std::vector<string> sentences;
+std::string sentence;
 
 #define TITLE L"EverydayRead"
 #define WIDTH 800

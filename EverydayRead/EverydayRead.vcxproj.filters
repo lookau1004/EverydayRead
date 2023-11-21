@@ -18,13 +18,16 @@
     <ClInclude Include="pch.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
-    <ClInclude Include="main.h">
+    <ClInclude Include="WinMain.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
-    <ClInclude Include="JsonDriver.h">
+    <ClInclude Include="JsonParse.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
-    <ClInclude Include="CurlDriver.h">
+    <ClInclude Include="GetHtml.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="Random.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
   </ItemGroup>
@@ -32,13 +35,16 @@
     <ClCompile Include="pch.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
-    <ClCompile Include="main.cpp">
+    <ClCompile Include="WinMain.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
-    <ClCompile Include="JsonDriver.cpp">
+    <ClCompile Include="JsonParse.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
-    <ClCompile Include="CurlDriver.cpp">
+    <ClCompile Include="GetHtml.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="Random.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
   </ItemGroup>
