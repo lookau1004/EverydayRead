@@ -9,9 +9,9 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance
 	curlResult = getHtml.Load();
 
 	JsonParse jsonParse(curlResult, sentences);
-	Random random(sentences, sentences.size());
+	Random random(sentences, sentences.size());	
 
-	sentence = random.GetSentence();
+	sentence = strToW.Convert(random.GetSentence());
 
 	if (FAILED(InitWindow(hInstance, nCmdShow)))
 		return 0;
@@ -76,7 +76,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 	{
 	case WM_PAINT:
 		hdc = BeginPaint(hWnd, &ps);
-		TextOutA(hdc, 100, 100, sentence.c_str(), sentence.size());
+		TextOut(hdc, 100, 100, sentence.c_str(), sentence.size());
 		EndPaint(hWnd, &ps);
 		return 0;
 

@@ -134,6 +134,7 @@
   <ItemGroup>
     <ClInclude Include="GetHtml.h" />
     <ClInclude Include="Random.h" />
+    <ClInclude Include="StrToW.h" />
     <ClInclude Include="WinMain.h" />
     <ClInclude Include="pch.h" />
     <ClInclude Include="JsonParse.h" />
@@ -141,6 +142,7 @@
   <ItemGroup>
     <ClCompile Include="GetHtml.cpp" />
     <ClCompile Include="Random.cpp" />
+    <ClCompile Include="StrToW.cpp" />
     <ClCompile Include="WinMain.cpp" />
     <ClCompile Include="pch.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>

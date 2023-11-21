@@ -3,13 +3,19 @@
 #include "GetHtml.h"
 #include "JsonParse.h"
 #include "Random.h"
+#include "StrToW.h"
 
+//CURL
 string curlResult;
 const char* _link = "https://raw.githubusercontent.com/rihyungame/EverydayRead/master/EverydayRead/guideline.json";
 
+//STRING
 std::vector<string> sentences;
-std::string sentence;
+std::wstring sentence;
 
+StrToW strToW;
+
+//WINDOW
 #define TITLE L"EverydayRead"
 #define WIDTH 800
 #define HEIGHT 600
