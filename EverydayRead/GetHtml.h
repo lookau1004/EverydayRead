@@ -16,6 +16,6 @@ private:
 	CURL* curl;
 	CURLcode res;
 	std::string readBuffer;
-	const char *link;
+	const char* link;
 };
 

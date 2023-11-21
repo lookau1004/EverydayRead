@@ -9,7 +9,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance
 	curlResult = getHtml.Load();
 
 	JsonParse jsonParse(curlResult, sentences);
-	Random random(sentences, sentences.size());	
+	Random random(sentences, sentences.size());
 
 	sentence = strToW.Convert(random.GetSentence());
 

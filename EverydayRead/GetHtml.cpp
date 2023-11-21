@@ -18,14 +18,6 @@ size_t GetHtml::WriteCallback(void* contents, size_t size, size_t nmemb, std::st
 	return size * nmemb;
 }
 
-// ÇÑ±Û ±úÁü ¹®Á¦ ÇØ°á with chatGPT
-//size_t GetHtml::WriteCallback(void* contents, size_t size, size_t nmemb, std::wstring* data)
-//{
-//	std::wstring_convert<std::codecvt_utf8_utf16<wchar_t>> converter;
-//	data->append(converter.from_bytes(static_cast<char*>(contents), static_cast<char*>(contents) + size * nmemb));
-//	return size * nmemb;
-//}
-
 std::string GetHtml::Load()
 {
 	if (curl)
