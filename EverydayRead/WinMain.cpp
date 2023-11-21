@@ -1,8 +1,8 @@
 #include "pch.h"
 #include "WinMain.h"
 
-int APIENTRY wWinMain(_In_ HINSTANCE hInstance,	_In_opt_ HINSTANCE hPrevInstance,
-					  _In_ LPWSTR lpCmdLine,	_In_ int nCmdShow)
+int APIENTRY wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance,
+	_In_ LPWSTR lpCmdLine, _In_ int nCmdShow)
 {
 
 	GetHtml getHtml(_link);
@@ -17,7 +17,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,	_In_opt_ HINSTANCE hPrevInstance
 		return 0;
 
 	MSG msg = {};
-		
+
 	while (msg.message != WM_QUIT)
 	{
 		if (PeekMessage(&msg, NULL, 0, 0, PM_REMOVE))
@@ -54,7 +54,7 @@ HRESULT InitWindow(HINSTANCE hInstance, int nCmdShow)
 	AdjustWindowRect(&rc, WS_OVERLAPPEDWINDOW, FALSE);
 
 	g_hInst = hInstance;
-	g_hwnd = CreateWindowW(TITLE, TITLE, WS_OVERLAPPEDWINDOW, CW_USEDEFAULT, CW_USEDEFAULT, 
+	g_hwnd = CreateWindowW(TITLE, TITLE, WS_OVERLAPPEDWINDOW, CW_USEDEFAULT, CW_USEDEFAULT,
 		rc.right - rc.left, rc.bottom - rc.top, nullptr, nullptr, hInstance, nullptr);
 
 	if (!g_hwnd)
@@ -69,7 +69,6 @@ HRESULT InitWindow(HINSTANCE hInstance, int nCmdShow)
 
 LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
-
 	HDC hdc;
 	PAINTSTRUCT ps;
 
