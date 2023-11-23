@@ -9,8 +9,11 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance
 
 	JsonParse jsonParse(curlResult, sentences);
 
-	randNum = random.GetNumber(sentences.size());
-	sentence = strToW.Convert(sentences[randNum]);
+	shuffleRandom.Init(sentences.size());
+
+	//randNum = random.GetNumber(sentences.size());
+	//randNum = shuffleRandom.GetRandomNum();
+	//sentence = strToW.Convert(sentences[randNum]);
 
 	if (FAILED(InitWindow(hInstance, nCmdShow)))
 		return 0;
@@ -70,6 +73,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
 	HDC hdc;
 	PAINTSTRUCT ps;
+	int senCount = shuffleRandom.GetCount() - 1; // 내부 연산 후 카운터 올라갔으므로 차감 후 표시
 
 	switch (message)
 	{
@@ -79,14 +83,16 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 		return 0;
 	case WM_PAINT:
 		hdc = BeginPaint(hWnd, &ps);
-		TextOut(hdc, 100, 100, sentence.c_str(), sentence.size());
+		TextOut(hdc, 20, 100, sentence.c_str(), sentence.size());
+		TextOut(hdc, 50, 50, to_wstring(senCount).c_str(), 2);
 		EndPaint(hWnd, &ps);
 		return 0;
 	case WM_COMMAND:
 		switch (LOWORD(wParam))
 		{
 		case 0:
-			randNum = random.GetNumber(sentences.size());
+			//randNum = random.GetNumber(sentences.size());
+			randNum = shuffleRandom.GetRandomNum();
 			sentence = strToW.Convert(sentences[randNum]);
 
 			InvalidateRect(hWnd, NULL, TRUE); // 화면 무효화

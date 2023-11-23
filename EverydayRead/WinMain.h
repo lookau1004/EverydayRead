@@ -2,8 +2,9 @@
 
 #include "GetHtml.h"
 #include "JsonParse.h"
-#include "Random.h"
 #include "StrToW.h"
+#include "ShuffleRandom.h"
+//#include "Random.h"
 
 //CURL
 string curlResult;
@@ -16,8 +17,11 @@ std::wstring sentence;
 //Wstring Convert
 StrToW strToW;
 
-//RANDOM
-Random random;
+//mt19937 Random
+//Random random;
+
+//ShuffleRandom
+ShuffleRandom shuffleRandom;
 int randNum;
 
 //WINDOW
@@ -32,5 +36,3 @@ RECT rc = { 0, 0, WIDTH, HEIGHT };
 
 HRESULT			 InitWindow(HINSTANCE hInstance, int);
 LRESULT CALLBACK WndProc(HWND, UINT, WPARAM, LPARAM);
-
-
