@@ -1,11 +1,21 @@
 #include "pch.h"
 #include "Random.h"
 
-Random::Random(std::vector<string>& _sentences, int _senSize)
-	: sentences(_sentences), senSize(_senSize), gen(rd()), dis(0, _senSize - 1)
+Random::Random()
 {
 }
 
 Random::~Random()
 {
+}
+
+int Random::GetNumber(int _senSize)
+{
+	senSize = _senSize;
+
+	std::random_device rd;
+	std::mt19937 gen(rd());
+	std::uniform_int_distribution<int> dis(0, senSize - 1);
+
+	return dis(gen);
 }

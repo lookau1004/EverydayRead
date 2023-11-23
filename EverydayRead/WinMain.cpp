@@ -4,14 +4,13 @@
 int APIENTRY wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance,
 	_In_ LPWSTR lpCmdLine, _In_ int nCmdShow)
 {
-
 	GetHtml getHtml(_link);
 	curlResult = getHtml.Load();
 
 	JsonParse jsonParse(curlResult, sentences);
-	Random random(sentences, sentences.size());
 
-	sentence = strToW.Convert(random.GetSentence());
+	randNum = random.GetNumber(sentences.size());
+	sentence = strToW.Convert(sentences[randNum]);
 
 	if (FAILED(InitWindow(hInstance, nCmdShow)))
 		return 0;
@@ -74,11 +73,26 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 
 	switch (message)
 	{
+	case WM_CREATE:
+		CreateWindow(L"button", L"Click Me", WS_CHILD | WS_VISIBLE | BS_PUSHBUTTON,
+			20, 20, 100, 25, hWnd, (HMENU)0, g_hInst, NULL);
+		return 0;
 	case WM_PAINT:
 		hdc = BeginPaint(hWnd, &ps);
 		TextOut(hdc, 100, 100, sentence.c_str(), sentence.size());
 		EndPaint(hWnd, &ps);
 		return 0;
+	case WM_COMMAND:
+		switch (LOWORD(wParam))
+		{
+		case 0:
+			randNum = random.GetNumber(sentences.size());
+			sentence = strToW.Convert(sentences[randNum]);
+
+			InvalidateRect(hWnd, NULL, TRUE); // 화면 무효화
+			UpdateWindow(hWnd); // WM_PAINT 호출
+			return 0;
+		}
 
 	case WM_DESTROY:
 		PostQuitMessage(0);

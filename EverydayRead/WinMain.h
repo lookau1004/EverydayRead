@@ -13,7 +13,12 @@ const char* _link = "https://raw.githubusercontent.com/rihyungame/EverydayRead/m
 std::vector<string> sentences;
 std::wstring sentence;
 
+//Wstring Convert
 StrToW strToW;
+
+//RANDOM
+Random random;
+int randNum;
 
 //WINDOW
 #define TITLE L"EverydayRead"
