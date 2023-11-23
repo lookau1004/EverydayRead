@@ -23,7 +23,7 @@ int randNum;
 //WINDOW
 #define TITLE L"EverydayRead"
 #define WIDTH 800
-#define HEIGHT 600
+#define HEIGHT 200
 
 HINSTANCE g_hInst;
 HWND g_hwnd;
