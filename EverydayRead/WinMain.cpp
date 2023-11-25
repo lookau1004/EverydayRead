@@ -73,12 +73,13 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
 	HDC hdc;
 	PAINTSTRUCT ps;
+	static HWND b1;
 	int senCount = shuffleRandom.GetCount() - 1; // 내부 연산 후 카운터 올라갔으므로 차감 후 표시
 
 	switch (message)
 	{
 	case WM_CREATE:
-		CreateWindow(L"button", L"Click Me", WS_CHILD | WS_VISIBLE | BS_PUSHBUTTON,
+		b1 = CreateWindow(L"button", L"Random", WS_CHILD | WS_VISIBLE | BS_PUSHBUTTON,
 			20, 20, 100, 25, hWnd, (HMENU)0, g_hInst, NULL);
 		return 0;
 	case WM_PAINT:
@@ -99,7 +100,17 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 			UpdateWindow(hWnd); // WM_PAINT 호출
 			return 0;
 		}
-
+	case WM_KEYDOWN:
+		switch (wParam)
+		{
+		case VK_RETURN:
+		case VK_SPACE:
+			SendMessage(b1, BM_CLICK, 0, 0);
+			SetFocus(hWnd);
+			return 0;
+		default:
+			return 0;
+		}
 	case WM_DESTROY:
 		PostQuitMessage(0);
 		return 0;
