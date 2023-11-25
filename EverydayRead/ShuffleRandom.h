@@ -12,6 +12,7 @@ public:
 	int GetRandomNum();
 	void SetCount(int n);
 	int GetCount();
+	int GetCountDigits();
 
 private:
 	int size;

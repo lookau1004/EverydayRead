@@ -42,3 +42,10 @@ int ShuffleRandom::GetCount()
 {
 	return count;
 }
+
+int ShuffleRandom::GetCountDigits()
+{
+	std::string s = to_string(count);
+
+	return s.size();
+}

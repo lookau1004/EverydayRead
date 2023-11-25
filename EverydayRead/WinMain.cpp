@@ -74,7 +74,8 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 	HDC hdc;
 	PAINTSTRUCT ps;
 	static HWND b1;
-	int senCount = shuffleRandom.GetCount() - 1; // 내부 연산 후 카운터 올라갔으므로 차감 후 표시
+	int senCount = shuffleRandom.GetCount(); // 내부 연산 후 카운터 올라갔으므로 차감 후 표시
+	int senCountDigits = shuffleRandom.GetCountDigits();
 
 	switch (message)
 	{
@@ -85,7 +86,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 	case WM_PAINT:
 		hdc = BeginPaint(hWnd, &ps);
 		TextOut(hdc, 20, 100, sentence.c_str(), sentence.size());
-		TextOut(hdc, 50, 50, to_wstring(senCount).c_str(), 2);
+		TextOut(hdc, 50, 50, to_wstring(senCount).c_str(), senCountDigits);
 		EndPaint(hWnd, &ps);
 		return 0;
 	case WM_COMMAND:
@@ -98,6 +99,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 
 			InvalidateRect(hWnd, NULL, TRUE); // 화면 무효화
 			UpdateWindow(hWnd); // WM_PAINT 호출
+			SetFocus(hWnd);
 			return 0;
 		}
 	case WM_KEYDOWN:
@@ -106,7 +108,6 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 		case VK_RETURN:
 		case VK_SPACE:
 			SendMessage(b1, BM_CLICK, 0, 0);
-			SetFocus(hWnd);
 			return 0;
 		default:
 			return 0;
