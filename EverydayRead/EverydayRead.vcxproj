@@ -136,6 +136,7 @@
     <ClInclude Include="Random.h" />
     <ClInclude Include="ShuffleRandom.h" />
     <ClInclude Include="StrToW.h" />
+    <ClInclude Include="TopicNow.h" />
     <ClInclude Include="WinMain.h" />
     <ClInclude Include="pch.h" />
     <ClInclude Include="JsonParse.h" />
@@ -145,6 +146,7 @@
     <ClCompile Include="Random.cpp" />
     <ClCompile Include="ShuffleRandom.cpp" />
     <ClCompile Include="StrToW.cpp" />
+    <ClCompile Include="TopicNow.cpp" />
     <ClCompile Include="WinMain.cpp" />
     <ClCompile Include="pch.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>

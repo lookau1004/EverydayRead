@@ -39,6 +39,9 @@
     <ClInclude Include="Random.h">
       <Filter>NotUse</Filter>
     </ClInclude>
+    <ClInclude Include="TopicNow.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp">
@@ -61,6 +64,9 @@
     </ClCompile>
     <ClCompile Include="Random.cpp">
       <Filter>NotUse</Filter>
+    </ClCompile>
+    <ClCompile Include="TopicNow.cpp">
+      <Filter>소스 파일</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
