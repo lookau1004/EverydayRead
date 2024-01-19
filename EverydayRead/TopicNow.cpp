@@ -18,7 +18,7 @@ std::string TopicNow::GetString()
 {
 
 	string topicResult;
-	ifstream file(".//python//data.json");
+	ifstream file(".//data.json");
 
 	if (file.is_open())
 	{
