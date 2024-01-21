@@ -1,4 +1,4 @@
-#from webdriver_manager.chrome import ChromeDriverManager
+from webdriver_manager.chrome import ChromeDriverManager
 from selenium.webdriver.common.by import By
 from selenium import webdriver
 import json
@@ -7,7 +7,7 @@ myOptions = webdriver.ChromeOptions()
 myOptions.add_argument("headless")
 myOptions.add_argument("lang=ko_KR")
 
-driver = webdriver.Chrome(options = myOptions)
+driver = webdriver.Chrome(ChromeDriverManager().install(), options = myOptions)
 
 URL = 'https://signal.bz/news'
 driver.get(url=URL)
