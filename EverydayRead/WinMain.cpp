@@ -4,13 +4,16 @@
 int APIENTRY wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance,
 	_In_ LPWSTR lpCmdLine, _In_ int nCmdShow)
 {
-// 새 콘솔창 생성
+// 콘솔창 생성
 	AllocConsole();
 	SetConsoleTitle(TEXT("stdout"));
 
 	freopen_s(&dummyOut, "CONOUT$", "wt", stdout);
 	freopen_s(&dummyIn, "CONIN$", "r", stdin);
-//
+
+// wstream 한글 설정
+	wcout.imbue(locale("kor"));					
+	wcin.imbue(locale("kor"));
 
 	GetHtml getHtml(_link);
 	curlResult = getHtml.Load();
@@ -85,8 +88,9 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 	int senCount = shuffleRandom.GetCount(); // 내부 연산 후 카운터 올라갔으므로 차감 후 표시
 	int senCountDigits = shuffleRandom.GetCountDigits();
 
-	//string temp;
+	//wstring temp = strToW.Convert(sentences[0]);
 	//temp.assign(sentence.begin(), sentence.end());
+	//std::wcout << temp;
 
 	switch (message)
 	{
