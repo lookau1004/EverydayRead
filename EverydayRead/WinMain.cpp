@@ -88,9 +88,11 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 	int senCount = shuffleRandom.GetCount(); // 내부 연산 후 카운터 올라갔으므로 차감 후 표시
 	int senCountDigits = shuffleRandom.GetCountDigits();
 
-	//wstring temp = strToW.Convert(sentences[0]);
-	//temp.assign(sentence.begin(), sentence.end());
-	//std::wcout << temp;
+	//wstring temp = strToW.Convert(sentences[randNum]);	// sentences에서 wstring으로 convert
+	wstring temp = L"test 테스트 1234567890 !@#$%^&*()_+ 1234567890 1234567890 1234567890";
+	LPCWSTR strDraw = temp.c_str();
+
+	RECT rtDraw = { 300,300,400,400 };
 
 	switch (message)
 	{
@@ -103,9 +105,8 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 			280, 20, 100, 25, hWnd, (HMENU)2, g_hInst, NULL);
 		return 0;
 	case WM_PAINT:
-		//LPCSTR str_cpp = &sentence, str_rank;
 		hdc = BeginPaint(hWnd, &ps);
-		//DrawText(hdc, )
+		DrawText(hdc, strDraw, temp.size(), &rtDraw, DT_WORDBREAK);
 		TextOut(hdc, 50, 50, to_wstring(senCount).c_str(), senCountDigits); // 현재 가이드라인 문장 번호
 		TextOut(hdc, 20, 100, sentence.c_str(), sentence.size()); // 가이드라인 랜덤 문장
 		TextOut(hdc, 20, 150, oneTopic.c_str(), oneTopic.size()); // 실시간 검색어 문장
