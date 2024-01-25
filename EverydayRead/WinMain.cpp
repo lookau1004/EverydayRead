@@ -4,6 +4,14 @@
 int APIENTRY wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance,
 	_In_ LPWSTR lpCmdLine, _In_ int nCmdShow)
 {
+// 새 콘솔창 생성
+	AllocConsole();
+	SetConsoleTitle(TEXT("stdout"));
+
+	freopen_s(&dummyOut, "CONOUT$", "wt", stdout);
+	freopen_s(&dummyIn, "CONIN$", "r", stdin);
+//
+
 	GetHtml getHtml(_link);
 	curlResult = getHtml.Load();
 
@@ -14,7 +22,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance
 	//randNum = random.GetNumber(sentences.size());				// mt19937 랜덤 사용
 	//randNum = shuffleRandom.GetRandomNum();
 	//sentence = strToW.Convert(sentences[randNum]);
-	
+
 	if (FAILED(InitWindow(hInstance, nCmdShow)))
 		return 0;
 
@@ -77,6 +85,9 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 	int senCount = shuffleRandom.GetCount(); // 내부 연산 후 카운터 올라갔으므로 차감 후 표시
 	int senCountDigits = shuffleRandom.GetCountDigits();
 
+	//string temp;
+	//temp.assign(sentence.begin(), sentence.end());
+
 	switch (message)
 	{
 	case WM_CREATE:
@@ -88,7 +99,9 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 			280, 20, 100, 25, hWnd, (HMENU)2, g_hInst, NULL);
 		return 0;
 	case WM_PAINT:
+		//LPCSTR str_cpp = &sentence, str_rank;
 		hdc = BeginPaint(hWnd, &ps);
+		//DrawText(hdc, )
 		TextOut(hdc, 50, 50, to_wstring(senCount).c_str(), senCountDigits); // 현재 가이드라인 문장 번호
 		TextOut(hdc, 20, 100, sentence.c_str(), sentence.size()); // 가이드라인 랜덤 문장
 		TextOut(hdc, 20, 150, oneTopic.c_str(), oneTopic.size()); // 실시간 검색어 문장
@@ -137,6 +150,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 			return 0;
 		}
 	case WM_DESTROY:
+		FreeConsole();
 		PostQuitMessage(0);
 		return 0;
 	}

@@ -7,6 +7,10 @@
 #include "TopicNow.h"
 //#include "Random.h"
 
+//CONSOLE
+FILE* dummyOut;
+FILE* dummyIn;
+
 //CURL
 string curlResult;
 const char* _link = "https://raw.githubusercontent.com/rihyungame/EverydayRead/master/EverydayRead/guideline.json";
