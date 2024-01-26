@@ -6,8 +6,15 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance
 {
 // 콘솔창 생성
 	AllocConsole();
-	SetConsoleTitle(TEXT("stdout"));
 
+// 콘솔창 제목 변경
+#ifdef _DEBUG
+	SetConsoleTitle(TEXT("Debug Mode"));
+#else
+	SetConsoleTitle(TEXT("Release Mode"));
+#endif
+
+// stream 재연결
 	freopen_s(&dummyOut, "CONOUT$", "wt", stdout);
 	freopen_s(&dummyIn, "CONIN$", "r", stdin);
 
