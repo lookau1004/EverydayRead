@@ -12,7 +12,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance
 	freopen_s(&dummyIn, "CONIN$", "r", stdin);
 
 // wstream 한글 설정
-	wcout.imbue(locale("kor"));					
+	wcout.imbue(locale(".utf8"));					
 	wcin.imbue(locale("kor"));
 
 // CURL Html 소스 가져오기
@@ -25,8 +25,9 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance
 	shuffleRandom.Init(sentences.size());
 
 // sources dir 폴더 탐색
-	DirList dirList(sentences);
+	dirList.Init();
 	dirList.Load();
+	cppDirList = dirList.GetVec();
 
 	//randNum = random.GetNumber(sentences.size());				// mt19937 랜덤 사용
 	//randNum = shuffleRandom.GetRandomNum();
@@ -89,16 +90,33 @@ HRESULT InitWindow(HINSTANCE hInstance, int nCmdShow)
 LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
 	HDC hdc;
+	HFONT hFont, OldFont;
 	PAINTSTRUCT ps;
 	static HWND b1, b2, b3;
 	int senCount = shuffleRandom.GetCount(); // 내부 연산 후 카운터 올라갔으므로 차감 후 표시
 	int senCountDigits = shuffleRandom.GetCountDigits();
-
 	//wstring temp = strToW.Convert(sentences[randNum]);	// sentences에서 wstring으로 convert
-	wstring temp = L"test 테스트 1234567890 !@#$%^&*()_+ 1234567890 1234567890 1234567890";
-	LPCWSTR strDraw = temp.c_str();
 
-	RECT rtDraw = { 300,300,400,400 };
+	wstring source;
+
+	ifstream file(cppDirList[0]);
+
+	if (file.is_open())
+	{
+		string temp;
+		int size = 0;
+
+		file.seekg(0, std::ios::end);	// 위치 지정자를 파일 끝으로
+		size = file.tellg();		// 위치 지정자까지의 크기 저장
+		temp.resize(size, ' ');		// drawtext에서 \0 문자 표시 때문에 ' '로 초기화
+		file.seekg(0, std::ios::beg);
+		file.read(&temp[0], size); // 파일을 읽어서 사이즈만큼 저장
+		source = strToW.Convert(temp); // utf-8 -> wstring?
+	}
+
+	LPCWSTR strDraw = source.c_str();
+
+	RECT rtDraw = { 300,300,1000,1000 };
 
 	switch (message)
 	{
@@ -112,7 +130,9 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 		return 0;
 	case WM_PAINT:
 		hdc = BeginPaint(hWnd, &ps);
-		DrawText(hdc, strDraw, temp.size(), &rtDraw, DT_WORDBREAK);
+		hFont = CreateFont(23, 0, 0, 0, 0, 0, 0, 0, HANGEUL_CHARSET, 0, 0, 0, VARIABLE_PITCH | FF_ROMAN, TEXT("궁서")); // 폰트 설정
+		OldFont = (HFONT)SelectObject(hdc, hFont);
+		DrawText(hdc, strDraw, source.size(), &rtDraw, DT_WORDBREAK | DT_EXPANDTABS); // DT_EXPANDTABS 탭 문자 표시
 		TextOut(hdc, 50, 50, to_wstring(senCount).c_str(), senCountDigits); // 현재 가이드라인 문장 번호
 		TextOut(hdc, 20, 100, sentence.c_str(), sentence.size()); // 가이드라인 랜덤 문장
 		TextOut(hdc, 20, 150, oneTopic.c_str(), oneTopic.size()); // 실시간 검색어 문장

@@ -5,10 +5,14 @@
 class DirList
 {
 public:
-	DirList(std::vector<std::string>& _dirListVec);
+	DirList();
 	~DirList();
+
+	void Init();
 	void Load();
+	std::vector<std::string> GetVec();
+
 private:
-	std::vector<std::string>& dirListVec;
+	std::vector<std::string> dirListVec;
 };
 

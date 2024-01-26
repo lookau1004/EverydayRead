@@ -8,6 +8,7 @@
 #include "DirList.h"
 //#include "Random.h"
 
+
 //CONSOLE
 FILE* dummyOut;
 FILE* dummyIn;
@@ -16,16 +17,20 @@ FILE* dummyIn;
 string curlResult;
 const char* _link = "https://raw.githubusercontent.com/rihyungame/EverydayRead/master/EverydayRead/guideline.json";
 
-//STRING
+//DIR
+DirList dirList;
+std::vector<string> cppDirList;
+
+//Sentences
 std::vector<string> sentences;
 std::wstring sentence;
+
+//TOPIC
+TopicNow topicNow;
 
 std::string topicResult;
 std::vector<string> topicVector;
 std::wstring oneTopic;
-
-//TOPIC
-TopicNow topicNow;
 
 //Wstring Convert
 StrToW strToW;

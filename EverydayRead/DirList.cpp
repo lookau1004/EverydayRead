@@ -1,13 +1,17 @@
 #include "pch.h"
 #include "DirList.h"
 
-DirList::DirList(std::vector<std::string>& _dirListVec) : dirListVec(_dirListVec)
+DirList::DirList() : dirListVec(0)
 {
-	std::experimental::filesystem::create_directory("./sources/");
 }
 
 DirList::~DirList()
 {
+}
+
+void DirList::Init()
+{
+	std::experimental::filesystem::create_directory("./sources/");
 }
 
 void DirList::Load()
@@ -19,8 +23,12 @@ void DirList::Load()
 
 		if (ext == ".cpp")
 		{
-			std::cout << entry.path();
-			dirListVec.push_back(entry.path().u8string());
+			dirListVec.push_back(entry.path().string());
 		}
 	}
+}
+
+std::vector<std::string> DirList::GetVec()
+{
+	return dirListVec;
 }
