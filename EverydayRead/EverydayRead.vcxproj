@@ -132,6 +132,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="DirList.h" />
     <ClInclude Include="GetHtml.h" />
     <ClInclude Include="Random.h" />
     <ClInclude Include="ShuffleRandom.h" />
@@ -142,6 +143,7 @@
     <ClInclude Include="JsonParse.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="DirList.cpp" />
     <ClCompile Include="GetHtml.cpp" />
     <ClCompile Include="Random.cpp" />
     <ClCompile Include="ShuffleRandom.cpp" />

@@ -5,6 +5,7 @@
 #include "StrToW.h"
 #include "ShuffleRandom.h"
 #include "TopicNow.h"
+#include "DirList.h"
 //#include "Random.h"
 
 //CONSOLE

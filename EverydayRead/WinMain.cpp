@@ -15,12 +15,18 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance
 	wcout.imbue(locale("kor"));					
 	wcin.imbue(locale("kor"));
 
+// CURL Html 소스 가져오기
 	GetHtml getHtml(_link);
 	curlResult = getHtml.Load();
 
+// nlohmann Json 생성
 	JsonParse jsonParse(curlResult, sentences, "cppguidelines");
-
+	
 	shuffleRandom.Init(sentences.size());
+
+// sources dir 폴더 탐색
+	DirList dirList(sentences);
+	dirList.Load();
 
 	//randNum = random.GetNumber(sentences.size());				// mt19937 랜덤 사용
 	//randNum = shuffleRandom.GetRandomNum();

@@ -13,7 +13,7 @@ public:
 
 private:
 	std::string inputJson, findStr;
-	std::vector<string>& sentences;
+	std::vector<std::string>& sentences;
 	json jsonData;
 };
 
