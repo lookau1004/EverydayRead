@@ -8,7 +8,6 @@
 #include "DirList.h"
 //#include "Random.h"
 
-
 //CONSOLE
 FILE* dummyOut;
 FILE* dummyIn;
@@ -44,8 +43,12 @@ int randNum;
 
 //WINDOW
 #define TITLE L"EverydayRead"
-#define WIDTH 1800
-#define HEIGHT 200
+
+//#define WIDTH 1980
+//#define HEIGHT 1080
+
+#define WIDTH GetSystemMetrics(SM_CXSCREEN)		// 전체화면
+#define HEIGHT GetSystemMetrics(SM_CYSCREEN)
 
 HINSTANCE g_hInst;
 HWND g_hwnd;
@@ -54,3 +57,5 @@ RECT rc = { 0, 0, WIDTH, HEIGHT };
 
 HRESULT			 InitWindow(HINSTANCE hInstance, int);
 LRESULT CALLBACK WndProc(HWND, UINT, WPARAM, LPARAM);
+
+int TempPos = 0; // 스크롤 위치

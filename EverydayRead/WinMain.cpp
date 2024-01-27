@@ -1,6 +1,8 @@
 #include "pch.h"
 #include "WinMain.h"
 
+#define ID_SCR 100
+
 int APIENTRY wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance,
 	_In_ LPWSTR lpCmdLine, _In_ int nCmdShow)
 {
@@ -99,9 +101,10 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 	HDC hdc;
 	HFONT hFont, OldFont;
 	PAINTSTRUCT ps;
-	static HWND b1, b2, b3;
+	static HWND b1, b2, b3, hScroll;
 	int senCount = shuffleRandom.GetCount(); // 내부 연산 후 카운터 올라갔으므로 차감 후 표시
 	int senCountDigits = shuffleRandom.GetCountDigits();
+
 	//wstring temp = strToW.Convert(sentences[randNum]);	// sentences에서 wstring으로 convert
 
 	wstring source;
@@ -134,6 +137,10 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 			150, 20, 100, 25, hWnd, (HMENU)1, g_hInst, NULL);
 		b3 = CreateWindow(L"button", L"ShowTopic", WS_CHILD | WS_VISIBLE | BS_PUSHBUTTON,
 			280, 20, 100, 25, hWnd, (HMENU)2, g_hInst, NULL);
+		hScroll = CreateWindow(L"scrollbar", NULL, WS_CHILD | WS_VISIBLE | SBS_VERT, 100, 300, 20, 900,
+			hWnd, (HMENU)ID_SCR, g_hInst, NULL);		
+		SetScrollRange(hScroll, SB_CTL, 0, 255, true);
+		SetScrollPos(hScroll, SB_CTL, TempPos, TRUE);
 		return 0;
 	case WM_PAINT:
 		hdc = BeginPaint(hWnd, &ps);
@@ -156,10 +163,10 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 			InvalidateRect(hWnd, NULL, TRUE); // 화면 무효화
 			UpdateWindow(hWnd); // WM_PAINT 호출
 			SetFocus(hWnd);
-			return 0;
+			break;
 		case 1:												// 파이썬으로 실검 JSON으로 저장
 			topicNow.PyLoad();
-			return 0;
+			break;
 		case 2:												// 실검 JSON 가져와서 뿌리기
 			oneTopic = strToW.Convert("");
 			topicResult = topicNow.GetString();
@@ -175,18 +182,40 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 			InvalidateRect(hWnd, NULL, TRUE); // 화면 무효화
 			UpdateWindow(hWnd); // WM_PAINT 호출
 			SetFocus(hWnd);
-			return 0;
+			break;
 		}
+		return 0;
 	case WM_KEYDOWN:
 		switch (wParam)
 		{
 		case VK_RETURN:
 		case VK_SPACE:
 			SendMessage(b1, BM_CLICK, 0, 0);
-			return 0;
-		default:
-			return 0;
+			break;
 		}
+		return 0;
+	case WM_VSCROLL:
+		switch (LOWORD(wParam))
+		{
+		case SB_LINEUP:
+			TempPos = max(0, TempPos - 1);
+			break;
+		case SB_LINEDOWN:
+			TempPos = min(255, TempPos + 1);
+			break;
+		case SB_PAGEUP:
+			TempPos = max(0, TempPos - 10);
+			break;
+		case SB_PAGEDOWN:
+			TempPos = min(255, TempPos + 10);
+			break;
+		case SB_THUMBTRACK:						// 스크롤바 드래그
+			TempPos = HIWORD(wParam); // y 값 대입
+			break;			
+		}
+		SetScrollPos((HWND)lParam, SB_CTL, TempPos, TRUE);
+		InvalidateRect(hWnd, NULL, FALSE);
+		return 0;
 	case WM_DESTROY:
 		FreeConsole();
 		PostQuitMessage(0);
