@@ -144,6 +144,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 		hdc = BeginPaint(hWnd, &ps);
 		hFont = CreateFont(23, 0, 0, 0, 0, 0, 0, 0, HANGEUL_CHARSET, 0, 0, 0, VARIABLE_PITCH | FF_ROMAN, TEXT("궁서")); // 폰트 설정
 		OldFont = (HFONT)SelectObject(hdc, hFont);
+		SendMessage(hEdit, WM_SETFONT, WPARAM(hFont), TRUE);
 		TextOut(hdc, 50, 50, to_wstring(senCount).c_str(), senCountDigits); // 현재 가이드라인 문장 번호
 		TextOut(hdc, 20, 100, sentence.c_str(), sentence.size()); // 가이드라인 랜덤 문장
 		TextOut(hdc, 20, 150, oneTopic.c_str(), oneTopic.size()); // 실시간 검색어 문장	
