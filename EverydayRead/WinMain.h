@@ -57,5 +57,3 @@ RECT rc = { 0, 0, WIDTH, HEIGHT };
 
 HRESULT			 InitWindow(HINSTANCE hInstance, int);
 LRESULT CALLBACK WndProc(HWND, UINT, WPARAM, LPARAM);
-
-int TempPos = 0; // 스크롤 위치
