@@ -19,7 +19,7 @@ void DirList::Load()
 	for (const experimental::filesystem::directory_entry& entry :
 		experimental::filesystem::recursive_directory_iterator(experimental::filesystem::current_path() / "sources"))
 	{
-		const std::string ext = entry.path().extension().u8string();
+		const std::string ext = entry.path().extension().string();
 
 		if (ext == ".cpp")
 		{

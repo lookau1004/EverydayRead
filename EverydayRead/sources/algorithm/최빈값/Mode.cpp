@@ -1,4 +1,5 @@
 ﻿#include <iostream>
+
 #define N 5
 
 int main()

@@ -16,6 +16,10 @@ FILE* dummyIn;
 string curlResult;
 const char* _link = "https://raw.githubusercontent.com/rihyungame/EverydayRead/master/EverydayRead/guideline.json";
 
+//Json
+JsonParse jsonParse;
+JsonParse topicParse;
+
 //DIR
 DirList dirList;
 std::vector<string> cppDirList;
@@ -40,8 +44,10 @@ StrToW strToW;
 //Random random;
 
 //ShuffleRandom
-ShuffleRandom shuffleRandom;
-int randNum;
+ShuffleRandom sentencesRandom;
+ShuffleRandom cppFileRandom;
+int sentencesNum;
+int cppFileNum;
 
 //WINDOW
 #define TITLE L"EverydayRead"

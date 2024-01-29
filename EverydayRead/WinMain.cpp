@@ -29,39 +29,17 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance
 	GetHtml getHtml(_link);
 	curlResult = getHtml.Load();
 
-	// nlohmann Json 생성
-	JsonParse jsonParse(curlResult, sentences, "cppguidelines");
+	// nlohmann Json으로 문장 파싱
+	jsonParse.Init(curlResult, sentences, "cppguidelines");
+	sentences = jsonParse.GetVector();
 
-	shuffleRandom.Init(sentences.size());
+	// 문장 랜덤 함수 초기화
+	sentencesRandom.Init(sentences.size());
 
 	// sources 폴더 리스트 가져오기
 	dirList.Init();
 	dirList.Load();
 	cppDirList = dirList.GetVec();
-
-	// 랜덤
-		//randNum = random.GetNumber(sentences.size());				// mt19937 랜덤 사용
-		//randNum = shuffleRandom.GetRandomNum();
-		//sentence = strToW.Convert(sentences[randNum]);
-
-	// 파일 경로 & 파일 내용 가져오기
-	cppDir = cppDirList[0];
-	ifstream file(cppDir);
-
-	if (file.is_open())
-	{
-		string temp;
-		int size = 0;
-
-		file.seekg(0, std::ios::end);	// 위치 지정자를 파일 끝으로
-		size = file.tellg();		// 위치 지정자까지의 크기 저장
-		temp.resize(size, ' ');		// drawtext에서 \0 문자 표시 때문에 ' '로 초기화
-		file.seekg(0, std::ios::beg);
-		file.read(&temp[0], size); // 파일을 읽어서 사이즈만큼 저장
-
-		temp = regex_replace(temp, std::regex("\n"), "\r\n");	// edit에서는 \n 대신 \r\n 사용
-		cppData = strToW.Convert(temp); // utf-8 -> wstring?
-	}
 
 	if (FAILED(InitWindow(hInstance, nCmdShow)))
 		return 0;
@@ -122,11 +100,9 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 	HDC hdc;
 	HFONT hFont, OldFont;
 	PAINTSTRUCT ps;
-	static HWND b1, b2, b3, hEdit;
-	int senCount = shuffleRandom.GetCount(); // 내부 연산 후 카운터 올라갔으므로 차감 후 표시
-	int senCountDigits = shuffleRandom.GetCountDigits();
-
-	fileAddress.assign(cppDir.begin(), cppDir.end());
+	static HWND b1, b2, b3, b4, hEdit;
+	int senCount = sentencesRandom.GetCount(); // 내부 연산 후 카운터 올라갔으므로 차감 후 표시
+	int senCountSize = sentencesRandom.GetCountDigits();	
 
 	switch (message)
 	{
@@ -137,28 +113,30 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 			150, 20, 100, 25, hWnd, (HMENU)1, g_hInst, NULL);
 		b3 = CreateWindow(L"button", L"ShowTopic", WS_CHILD | WS_VISIBLE | BS_PUSHBUTTON,
 			280, 20, 100, 25, hWnd, (HMENU)2, g_hInst, NULL);
+		b4 = CreateWindow(L"button", L"ShowCpp", WS_CHILD | WS_VISIBLE | BS_PUSHBUTTON,
+			410, 20, 100, 25, hWnd, (HMENU)3, g_hInst, NULL);
 		hEdit = CreateWindow(L"edit", NULL, WS_CHILD | WS_VISIBLE | WS_BORDER | ES_MULTILINE | ES_READONLY | WS_VSCROLL,
 			300, 300, 1000, 1000, hWnd, (HMENU)ID_EDIT, g_hInst, NULL);
-		SendMessage(hEdit, WM_SETTEXT, 0, (LPARAM)cppData.c_str());
 		return 0;
 	case WM_PAINT:
 		hdc = BeginPaint(hWnd, &ps);
 		hFont = CreateFont(23, 0, 0, 0, 0, 0, 0, 0, HANGEUL_CHARSET, 0, 0, 0, VARIABLE_PITCH | FF_ROMAN, TEXT("궁서")); // 폰트 설정
 		OldFont = (HFONT)SelectObject(hdc, hFont);
-		SendMessage(hEdit, WM_SETFONT, WPARAM(hFont), TRUE);
-		TextOut(hdc, 50, 50, to_wstring(senCount).c_str(), senCountDigits); // 현재 가이드라인 문장 번호
+		SendMessage(hEdit, WM_SETFONT, WPARAM(hFont), TRUE);			// edit 컨트롤 폰트 설정
+		SendMessage(hEdit, WM_SETTEXT, 0, (LPARAM)cppData.c_str());		// edit 컨트롤 text 설정
+		TextOut(hdc, 50, 50, to_wstring(senCount).c_str(), senCountSize); // 현재 가이드라인 문장 번호
 		TextOut(hdc, 20, 100, sentence.c_str(), sentence.size()); // 가이드라인 랜덤 문장
 		TextOut(hdc, 20, 150, oneTopic.c_str(), oneTopic.size()); // 실시간 검색어 문장	
-		TextOut(hdc, 300, 270, fileAddress.c_str(), fileAddress.size()); // 실시간 검색어 문장	
+		TextOut(hdc, 300, 270, fileAddress.c_str(), fileAddress.size()); // 파일 경로 표시
 		EndPaint(hWnd, &ps);
 		return 0;
 	case WM_COMMAND:
 		switch (LOWORD(wParam))
 		{
 		case 0:												// 가이드라인 랜덤하게 뽑아서 뿌리기
-			//randNum = random.GetNumber(sentences.size());
-			randNum = shuffleRandom.GetRandomNum();
-			sentence = strToW.Convert(sentences[randNum]);
+			//sentencesNum = random.GetNumber(sentences.size());
+			sentencesNum = sentencesRandom.GetRandomNum();
+			sentence = strToW.Convert(sentences[sentencesNum]);
 			InvalidateRect(hWnd, NULL, TRUE); // 화면 무효화
 			UpdateWindow(hWnd); // WM_PAINT 호출
 			SetFocus(hWnd);
@@ -170,13 +148,45 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 			oneTopic = strToW.Convert("");
 			topicResult = topicNow.GetString();
 
-			JsonParse topicParse(topicResult, topicVector, "topic");
+			topicParse.Init(topicResult, topicVector, "topic");
+			topicVector = topicParse.GetVector();
 
 			for (std::vector<string>::size_type i = 0; i < topicVector.size(); ++i)
 			{
 				oneTopic += strToW.Convert(topicVector[i]);
 				oneTopic += strToW.Convert(" ");
 			}
+
+			InvalidateRect(hWnd, NULL, TRUE); // 화면 무효화
+			UpdateWindow(hWnd); // WM_PAINT 호출
+			SetFocus(hWnd);
+			break;
+		case 3:												// CppFile 가져와서 보여주기
+			cppFileRandom.Init(cppDirList.size());			// 랜덤 초기화
+			cppFileNum = cppFileRandom.GetRandomNum();
+
+			// 파일 경로 & 파일 내용 가져오기
+			cppDir = cppDirList[cppFileNum];
+			fileAddress.assign(cppDir.begin(), cppDir.end());	// 파일 경로 wstring 변환
+
+			ifstream file(cppDir);
+
+			if (file.is_open())
+			{
+				string temp;
+				int size = 0;
+
+				file.seekg(0, std::ios::end);	// 위치 지정자를 파일 끝으로
+				size = file.tellg();		// 위치 지정자까지의 크기 저장
+				temp.resize(size, ' ');		// drawtext에서 \0 문자 표시 때문에 ' '로 초기화
+				file.seekg(0, std::ios::beg);
+				file.read(&temp[0], size); // 파일을 읽어서 사이즈만큼 저장
+
+				temp = regex_replace(temp, std::regex("\n"), "\r\n");	// edit에서는 \n 대신 \r\n 사용
+				cppData = strToW.Convert(temp); // utf-8 -> wstring?
+			}
+
+			file.close();
 
 			InvalidateRect(hWnd, NULL, TRUE); // 화면 무효화
 			UpdateWindow(hWnd); // WM_PAINT 호출
