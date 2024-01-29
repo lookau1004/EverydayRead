@@ -106,11 +106,11 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 	int senCount = shuffleRandom.GetCount(); // 내부 연산 후 카운터 올라갔으므로 차감 후 표시
 	int senCountDigits = shuffleRandom.GetCountDigits();
 
-	//wstring temp = strToW.Convert(sentences[randNum]);	// sentences에서 wstring으로 convert
+	wstring source, fileAddress;
+	string strTemp = cppDirList[0];
+	fileAddress.assign(strTemp.begin(), strTemp.end());
 
-	wstring source;
-
-	ifstream file(cppDirList[0]);
+	ifstream file(strTemp);
 
 	if (file.is_open())
 	{
@@ -148,6 +148,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 		TextOut(hdc, 50, 50, to_wstring(senCount).c_str(), senCountDigits); // 현재 가이드라인 문장 번호
 		TextOut(hdc, 20, 100, sentence.c_str(), sentence.size()); // 가이드라인 랜덤 문장
 		TextOut(hdc, 20, 150, oneTopic.c_str(), oneTopic.size()); // 실시간 검색어 문장	
+		TextOut(hdc, 300, 270, fileAddress.c_str(), fileAddress.size()); // 실시간 검색어 문장	
 		EndPaint(hWnd, &ps);
 		return 0;
 	case WM_COMMAND:
