@@ -7,41 +7,61 @@
 int APIENTRY wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance,
 	_In_ LPWSTR lpCmdLine, _In_ int nCmdShow)
 {
-// 콘솔창 생성
+	// 콘솔창 생성
 	AllocConsole();
 
-// 콘솔창 제목 변경
+	// 콘솔창 제목 변경
 #ifdef _DEBUG
 	SetConsoleTitle(TEXT("Debug Mode"));
 #else
 	SetConsoleTitle(TEXT("Release Mode"));
 #endif
 
-// stream 재연결
+	// stream 재연결
 	freopen_s(&dummyOut, "CONOUT$", "wt", stdout);
 	freopen_s(&dummyIn, "CONIN$", "r", stdin);
 
-// wstream 한글 설정
-	wcout.imbue(locale(".utf8"));					
+	// wstream 한글 설정
+	wcout.imbue(locale(".utf8"));
 	wcin.imbue(locale("kor"));
 
-// CURL Html 소스 가져오기
+	// CURL Html 소스 가져오기
 	GetHtml getHtml(_link);
 	curlResult = getHtml.Load();
 
-// nlohmann Json 생성
+	// nlohmann Json 생성
 	JsonParse jsonParse(curlResult, sentences, "cppguidelines");
-	
+
 	shuffleRandom.Init(sentences.size());
 
-// sources dir 폴더 탐색
+	// sources 폴더 리스트 가져오기
 	dirList.Init();
 	dirList.Load();
 	cppDirList = dirList.GetVec();
 
-	//randNum = random.GetNumber(sentences.size());				// mt19937 랜덤 사용
-	//randNum = shuffleRandom.GetRandomNum();
-	//sentence = strToW.Convert(sentences[randNum]);
+	// 랜덤
+		//randNum = random.GetNumber(sentences.size());				// mt19937 랜덤 사용
+		//randNum = shuffleRandom.GetRandomNum();
+		//sentence = strToW.Convert(sentences[randNum]);
+
+	// 파일 경로 & 파일 내용 가져오기
+	cppDir = cppDirList[0];
+	ifstream file(cppDir);
+
+	if (file.is_open())
+	{
+		string temp;
+		int size = 0;
+
+		file.seekg(0, std::ios::end);	// 위치 지정자를 파일 끝으로
+		size = file.tellg();		// 위치 지정자까지의 크기 저장
+		temp.resize(size, ' ');		// drawtext에서 \0 문자 표시 때문에 ' '로 초기화
+		file.seekg(0, std::ios::beg);
+		file.read(&temp[0], size); // 파일을 읽어서 사이즈만큼 저장
+
+		temp = regex_replace(temp, std::regex("\n"), "\r\n");	// edit에서는 \n 대신 \r\n 사용
+		cppData = strToW.Convert(temp); // utf-8 -> wstring?
+	}
 
 	if (FAILED(InitWindow(hInstance, nCmdShow)))
 		return 0;
@@ -106,26 +126,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 	int senCount = shuffleRandom.GetCount(); // 내부 연산 후 카운터 올라갔으므로 차감 후 표시
 	int senCountDigits = shuffleRandom.GetCountDigits();
 
-	wstring source, fileAddress;
-	string strTemp = cppDirList[0];
-	fileAddress.assign(strTemp.begin(), strTemp.end());
-
-	ifstream file(strTemp);
-
-	if (file.is_open())
-	{
-		string temp;
-		int size = 0;
-
-		file.seekg(0, std::ios::end);	// 위치 지정자를 파일 끝으로
-		size = file.tellg();		// 위치 지정자까지의 크기 저장
-		temp.resize(size, ' ');		// drawtext에서 \0 문자 표시 때문에 ' '로 초기화
-		file.seekg(0, std::ios::beg);
-		file.read(&temp[0], size); // 파일을 읽어서 사이즈만큼 저장
-	
-		temp = regex_replace(temp, std::regex("\n"), "\r\n");	// edit에서는 \n 대신 \r\n 사용
-		source = strToW.Convert(temp); // utf-8 -> wstring?
-	}
+	fileAddress.assign(cppDir.begin(), cppDir.end());
 
 	switch (message)
 	{
@@ -135,10 +136,10 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 		b2 = CreateWindow(L"button", L"GetTopic", WS_CHILD | WS_VISIBLE | BS_PUSHBUTTON,
 			150, 20, 100, 25, hWnd, (HMENU)1, g_hInst, NULL);
 		b3 = CreateWindow(L"button", L"ShowTopic", WS_CHILD | WS_VISIBLE | BS_PUSHBUTTON,
-			280, 20, 100, 25, hWnd, (HMENU)2, g_hInst, NULL);			
+			280, 20, 100, 25, hWnd, (HMENU)2, g_hInst, NULL);
 		hEdit = CreateWindow(L"edit", NULL, WS_CHILD | WS_VISIBLE | WS_BORDER | ES_MULTILINE | ES_READONLY | WS_VSCROLL,
 			300, 300, 1000, 1000, hWnd, (HMENU)ID_EDIT, g_hInst, NULL);
-		SendMessage(hEdit, WM_SETTEXT, 0, (LPARAM)source.c_str());
+		SendMessage(hEdit, WM_SETTEXT, 0, (LPARAM)cppData.c_str());
 		return 0;
 	case WM_PAINT:
 		hdc = BeginPaint(hWnd, &ps);

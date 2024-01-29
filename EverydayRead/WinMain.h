@@ -19,6 +19,8 @@ const char* _link = "https://raw.githubusercontent.com/rihyungame/EverydayRead/m
 //DIR
 DirList dirList;
 std::vector<string> cppDirList;
+string cppDir;
+wstring cppData, fileAddress;
 
 //Sentences
 std::vector<string> sentences;
