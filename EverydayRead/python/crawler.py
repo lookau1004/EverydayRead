@@ -22,12 +22,12 @@ print(date_now.text)
 myDict = dict()
 myList = list()
 
-count = 1
-
+# myStr = str(count) + "위 " + naver_result.text
+# count = 1
+# count += 1
 for naver_result in naver_results:
-    myStr = str(count) + "위 " + naver_result.text
+    myStr = naver_result.text
     myList.append(myStr)
-    count += 1
 
 myDict['topic'] = myList
 

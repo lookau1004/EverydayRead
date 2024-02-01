@@ -32,10 +32,10 @@ std::wstring sentence;
 
 //TOPIC
 TopicNow topicNow;
+bool isLoadTopics;
 
 std::string topicResult;
 std::vector<string> topicVector;
-std::wstring oneTopic;
 
 //Wstring Convert
 StrToW strToW;
@@ -62,6 +62,8 @@ HINSTANCE g_hInst;
 HWND g_hwnd;
 
 RECT rc = { 0, 0, WIDTH, HEIGHT };
+
+std::vector<HWND> hStaticControls;
 
 HRESULT			 InitWindow(HINSTANCE hInstance, int);
 LRESULT CALLBACK WndProc(HWND, UINT, WPARAM, LPARAM);
