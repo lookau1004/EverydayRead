@@ -101,9 +101,9 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 	HFONT hFont, OldFont;
 	PAINTSTRUCT ps;
 	static HWND b1, b2, b3, b4, hEdit;
-	
+
 	int senCount = sentencesRandom.GetCount(); // 내부 연산 후 카운터 올라갔으므로 차감 후 표시
-	int senCountSize = sentencesRandom.GetCountDigits();	
+	int senCountSize = sentencesRandom.GetCountDigits();
 
 	switch (message)
 	{
@@ -128,7 +128,6 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 		SendMessage(hEdit, WM_SETTEXT, 0, (LPARAM)cppData.c_str());			// edit 컨트롤 text 설정
 		TextOut(hdc, 50, 50, to_wstring(senCount).c_str(), senCountSize);	// 현재 가이드라인 문장 번호
 		TextOut(hdc, 20, 100, sentence.c_str(), sentence.size());			// 가이드라인 랜덤 문장
-		//TextOut(hdc, 20, 150, oneTopic.c_str(), oneTopic.size());			// 실시간 검색어 문장	
 		TextOut(hdc, 300, 270, fileAddress.c_str(), fileAddress.size());	// 파일 경로 표시
 		EndPaint(hWnd, &ps);
 		break;
@@ -138,7 +137,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 		{
 			if (LOWORD(wParam) == i)
 			{
-				wstring topicLink = L"https://search.naver.com/search.naver?query=" + 
+				wstring topicLink = L"https://search.naver.com/search.naver?query=" +
 					strToW.Convert(topicVector[i]);
 
 				ShellExecute(NULL, L"open", topicLink.c_str(), NULL, NULL, SW_SHOWNORMAL);		// 인터넷 실행
@@ -158,7 +157,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 			break;
 
 		case 11:												// 파이썬으로 실검 JSON으로 저장
-			topicNow.PyLoad();			
+			topicNow.PyLoad();
 			break;
 
 		case 12:												// 실검 JSON 가져와서 뿌리기
@@ -248,7 +247,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 		PostQuitMessage(0);
 		break;
 
-	default : 
+	default:
 		return DefWindowProc(hWnd, message, wParam, lParam);
 	}
 
