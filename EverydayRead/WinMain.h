@@ -51,6 +51,7 @@ int cppFileNum;
 
 //WINDOW
 #define TITLE L"EverydayRead"
+#define TITLE2 L"Calculate"
 
 //#define WIDTH 1980
 //#define HEIGHT 1080
@@ -67,3 +68,12 @@ std::vector<HWND> hStaticControls;
 
 HRESULT			 InitWindow(HINSTANCE hInstance, int);
 LRESULT CALLBACK WndProc(HWND, UINT, WPARAM, LPARAM);
+LRESULT CALLBACK WndProc2(HWND, UINT, WPARAM, LPARAM);
+
+//WndProc
+HDC hdc;
+HFONT hFont, OldFont;
+PAINTSTRUCT ps;
+static HWND b1, b2, b3, b4, b5, hEdit, newWindow;
+ifstream file;
+bool isNewWindowOpen;

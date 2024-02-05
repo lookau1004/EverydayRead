@@ -153,6 +153,7 @@
     <ClInclude Include="JsonParse.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Calculate.cpp" />
     <ClCompile Include="DirList.cpp" />
     <ClCompile Include="GetHtml.cpp" />
     <ClCompile Include="Random.cpp" />

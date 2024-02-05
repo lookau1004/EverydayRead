@@ -60,7 +60,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance
 
 HRESULT InitWindow(HINSTANCE hInstance, int nCmdShow)
 {
-	WNDCLASSEXW wcex;
+	WNDCLASSEXW wcex, wcex2;
 
 	wcex.cbSize = sizeof(WNDCLASSEX);
 
@@ -76,7 +76,24 @@ HRESULT InitWindow(HINSTANCE hInstance, int nCmdShow)
 	wcex.lpszClassName = TITLE;
 	wcex.hIconSm = LoadIcon(wcex.hInstance, MAKEINTRESOURCE(IDI_APPLICATION));
 
+	wcex2.cbSize = sizeof(WNDCLASSEX);
+
+	wcex2.style = CS_HREDRAW | CS_VREDRAW;
+	wcex2.lpfnWndProc = WndProc2;
+	wcex2.cbClsExtra = 0;
+	wcex2.cbWndExtra = 0;
+	wcex2.hInstance = hInstance;
+	wcex2.hIcon = LoadIcon(hInstance, MAKEINTRESOURCE(IDI_APPLICATION));
+	wcex2.hCursor = LoadCursor(nullptr, IDC_ARROW);
+	wcex2.hbrBackground = (HBRUSH)(COLOR_WINDOW + 1);
+	wcex2.lpszMenuName = NULL;
+	wcex2.lpszClassName = TITLE2;
+	wcex2.hIconSm = LoadIcon(wcex2.hInstance, MAKEINTRESOURCE(IDI_APPLICATION));
+
 	if (!RegisterClassExW(&wcex))
+		return E_FAIL;
+
+	if (!RegisterClassExW(&wcex2))
 		return E_FAIL;
 
 	AdjustWindowRect(&rc, WS_OVERLAPPEDWINDOW, FALSE);
@@ -97,11 +114,6 @@ HRESULT InitWindow(HINSTANCE hInstance, int nCmdShow)
 
 LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
-	HDC hdc;
-	HFONT hFont, OldFont;
-	PAINTSTRUCT ps;
-	static HWND b1, b2, b3, b4, hEdit;
-
 	int senCount = sentencesRandom.GetCount(); // 내부 연산 후 카운터 올라갔으므로 차감 후 표시
 	int senCountSize = sentencesRandom.GetCountDigits();
 
@@ -116,6 +128,8 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 			280, 20, 100, 25, hWnd, (HMENU)12, g_hInst, NULL);
 		b4 = CreateWindow(L"button", L"ShowCpp", WS_CHILD | WS_VISIBLE | BS_PUSHBUTTON,
 			410, 20, 100, 25, hWnd, (HMENU)13, g_hInst, NULL);
+		b5 = CreateWindow(L"button", L"Calculate", WS_CHILD | WS_VISIBLE | BS_PUSHBUTTON,
+			540, 20, 100, 25, hWnd, (HMENU)14, g_hInst, NULL);
 		hEdit = CreateWindow(L"edit", NULL, WS_CHILD | WS_VISIBLE | WS_BORDER | ES_MULTILINE | ES_READONLY | WS_VSCROLL,
 			300, 300, 1000, 1000, hWnd, (HMENU)ID_EDIT, g_hInst, NULL);
 		break;
@@ -133,7 +147,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 		break;
 
 	case WM_COMMAND:
-		for (size_t i = 0; i < hStaticControls.size(); ++i)
+		for (size_t i = 0; i < hStaticControls.size(); ++i)					// 매번 컨트롤이 눌러졌는지 검사
 		{
 			if (LOWORD(wParam) == i)
 			{
@@ -206,7 +220,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 			cppDir = cppDirList[cppFileNum];
 			fileAddress.assign(cppDir.begin(), cppDir.end());	// 파일 경로 wstring 변환
 
-			ifstream file(cppDir);
+			file.open(cppDir);
 
 			if (file.is_open())
 			{
@@ -229,6 +243,15 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 			UpdateWindow(hWnd);				  // WM_PAINT 호출
 			SetFocus(hWnd);
 			break;
+		case 14:							  // 자식창 생성
+			if (!isNewWindowOpen)
+			{
+				newWindow = CreateWindowEx(0, TITLE2, TITLE2, WS_OVERLAPPEDWINDOW, CW_USEDEFAULT, CW_USEDEFAULT,
+					800, 600, g_hwnd, NULL, NULL, NULL);
+				ShowWindow(newWindow, SW_SHOWNORMAL);
+				isNewWindowOpen = true;
+			}
+			break;
 		}
 		break;
 
@@ -249,6 +272,20 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 
 	default:
 		return DefWindowProc(hWnd, message, wParam, lParam);
+	}
+
+	return 0;
+}
+
+LRESULT CALLBACK WndProc2(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam) {
+	switch (message) {
+	case WM_CLOSE:
+	case WM_DESTROY:
+		DestroyWindow(hwnd);
+		isNewWindowOpen = false;
+		break;
+	default:
+		return DefWindowProc(hwnd, message, wParam, lParam);
 	}
 
 	return 0;
