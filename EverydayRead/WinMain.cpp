@@ -135,11 +135,14 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 		hdc = BeginPaint(hWnd, &ps);
 		hFont = CreateFont(23, 0, 0, 0, 0, 0, 0, 0, HANGEUL_CHARSET, 0, 0, 0, VARIABLE_PITCH | FF_ROMAN, TEXT("궁서")); // 폰트 설정
 		OldFont = (HFONT)SelectObject(hdc, hFont);
+
 		SendMessage(hEdit, WM_SETFONT, WPARAM(hFont), TRUE);				// edit 컨트롤 폰트 설정
 		SendMessage(hEdit, WM_SETTEXT, 0, (LPARAM)cppData.c_str());			// edit 컨트롤 text 설정
+
 		TextOut(hdc, 50, 50, to_wstring(senCount).c_str(), senCountSize);	// 현재 가이드라인 문장 번호
 		TextOut(hdc, 20, 100, sentence.c_str(), sentence.size());			// 가이드라인 랜덤 문장
 		TextOut(hdc, 300, 270, fileAddress.c_str(), fileAddress.size());	// 파일 경로 표시
+
 		EndPaint(hWnd, &ps);
 		break;
 
@@ -162,6 +165,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 			//sentencesNum = random.GetNumber(sentences.size());
 			sentencesNum = sentencesRandom.GetRandomNum();
 			sentence = strToW.Convert(sentences[sentencesNum]);
+
 			InvalidateRect(hWnd, NULL, TRUE);					// 화면 무효화
 			UpdateWindow(hWnd);									// WM_PAINT 호출
 			SetFocus(hWnd);
@@ -274,21 +278,42 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 	return 0;
 }
 
-LRESULT CALLBACK WndProc2(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam) {
+LRESULT CALLBACK WndProc2(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
+{
 	switch (message)
 	{
 	case WM_CREATE:
 		childEdit1 = CreateWindow(L"edit", NULL, WS_CHILD | WS_VISIBLE | WS_BORDER | ES_MULTILINE | ES_READONLY | WS_VSCROLL,
 			50, 50, 600, 100, hWnd, (HMENU)100, g_hInst, NULL);
 		childEdit2 = CreateWindow(L"edit", NULL, WS_CHILD | WS_VISIBLE | WS_BORDER, 50, 200, 100, 50, hWnd, (HMENU)101, g_hInst, NULL);
-		childB1 = CreateWindow(L"button", L"Check", WS_CHILD | WS_VISIBLE | BS_PUSHBUTTON, 50, 250, 100, 25, hWnd, (HMENU)10, g_hInst, NULL);
+		childB1 = CreateWindow(L"button", L"Start", WS_CHILD | WS_VISIBLE | BS_PUSHBUTTON, 50, 250, 100, 25, hWnd, (HMENU)20, g_hInst, NULL);
+		childB2 = CreateWindow(L"button", L"Check", WS_CHILD | WS_VISIBLE | BS_PUSHBUTTON, 50, 275, 100, 25, hWnd, (HMENU)21, g_hInst, NULL);
 		break;
 	case WM_COMMAND:
 		switch (LOWORD(wParam))
 		{
-		case 10:
+		case 20:									// Start 버튼
+			calculator.Init();
+			resultStr = calculator.GetStr();
+			resultValue = calculator.GetTotal();
+			calculator.Reset();						// 내부 sstream 초기화
+
+			SendMessage(childEdit1, WM_SETFONT, WPARAM(hFont), TRUE);
+			SendMessage(childEdit1, WM_SETTEXT, 0, (LPARAM)resultStr.c_str());
+
+			EnableWindow(childB1, false);
+			EnableWindow(childB2, true);
+			break;
+		case 21:									// Check 버튼
 			GetWindowText(childEdit2, buff, 1024);
-			SendMessage(childEdit1, WM_SETTEXT, 0, (LPARAM)buff);
+			answerValue = _wtoi(buff);				// wchar 배열에 저장된 total 값 변환
+
+			if (answerValue = resultValue)			// 계산한 답이 맞으면
+			{
+				EnableWindow(childB1, true);
+				EnableWindow(childB2, false);
+			}
+			break;
 		}
 		break;
 	case WM_CLOSE:

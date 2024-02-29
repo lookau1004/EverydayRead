@@ -1,16 +1,21 @@
 #include "pch.h"
+#include "Calculator.h"
 
-// TODO : 새로운 윈도우 창에 사칙연산 퀴즈 만들기
-
-int test()
+Calculator::Calculator()
 {
-	std::vector<char> signGroup;
+}
+
+Calculator::~Calculator()
+{
+}
+
+void Calculator::Init()
+{
 	srand(time(NULL));
 
-	int signCount = std::rand() % 5 + 1; // 1 ~ 5
-	std::cout << signCount << std::endl;
-
+	signCount = std::rand() % 2 + 1; // 1 ~ 2 부호 개수
 	signGroup.resize(signCount);
+	numGroup.resize(signCount + 1);
 
 	for (int i = 0; i < signCount; ++i)
 	{
@@ -33,16 +38,14 @@ int test()
 		}
 	}
 
-	std::vector<int> numGroup(signCount + 1);
-
 	for (int i = 0; i < numGroup.size(); ++i)
 	{
 		int nRand = rand() % 999 + 1; // 1 ~ 999
 		numGroup[i] = nRand;
 	}
 
-	int total = numGroup[0];
-	std::cout << numGroup[0] << ' ';
+	total = numGroup[0];
+	ss << numGroup[0];
 
 	for (int i = 0; i < signCount; ++i)
 	{
@@ -62,13 +65,13 @@ int test()
 			break;
 		}
 
-		std::cout << signGroup[i] << ' ' << numGroup[i + 1] << ' ';
+		ss << L" " << signGroup[i] << L" " << numGroup[i + 1];
 	}
 
-	int answer;
-	std::cin >> answer;
+	resultStr = ss.str();
+}
 
-	std::cout << std::endl << total;
-
-	return 0;
+void Calculator::Reset()
+{
+	ss.str(L"");
 }

@@ -142,6 +142,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="Calculator.h" />
     <ClInclude Include="DirList.h" />
     <ClInclude Include="GetHtml.h" />
     <ClInclude Include="Random.h" />
@@ -153,7 +154,7 @@
     <ClInclude Include="JsonParse.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Calculate.cpp" />
+    <ClCompile Include="Calculator.cpp" />
     <ClCompile Include="DirList.cpp" />
     <ClCompile Include="GetHtml.cpp" />
     <ClCompile Include="Random.cpp" />

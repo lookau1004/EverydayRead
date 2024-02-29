@@ -6,6 +6,7 @@
 #include "ShuffleRandom.h"
 #include "TopicNow.h"
 #include "DirList.h"
+#include "Calculator.h"
 //#include "Random.h"
 
 //CONSOLE
@@ -36,6 +37,9 @@ bool isLoadTopics;
 
 std::string topicResult;
 std::vector<string> topicVector;
+
+//Calculator
+Calculator calculator;
 
 //Wstring Convert
 StrToW strToW;
@@ -75,7 +79,9 @@ HDC hdc;
 HFONT hFont, OldFont;
 PAINTSTRUCT ps;
 static HWND b1, b2, b3, b4, b5, hEdit, newWindow;
-static HWND childB1, childEdit1, childEdit2;
+static HWND childB1, childB2, childEdit1, childEdit2;
 ifstream file;
 bool isNewWindowOpen;
 WCHAR buff[1024];
+wstring resultStr;
+int resultValue, answerValue;
