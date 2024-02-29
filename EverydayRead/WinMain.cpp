@@ -1,9 +1,6 @@
 #include "pch.h"
 #include "WinMain.h"
 
-#define ID_SCR 100
-#define ID_EDIT 101
-
 int APIENTRY wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance,
 	_In_ LPWSTR lpCmdLine, _In_ int nCmdShow)
 {
@@ -131,7 +128,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 		b5 = CreateWindow(L"button", L"Calculate", WS_CHILD | WS_VISIBLE | BS_PUSHBUTTON,
 			540, 20, 100, 25, hWnd, (HMENU)14, g_hInst, NULL);
 		hEdit = CreateWindow(L"edit", NULL, WS_CHILD | WS_VISIBLE | WS_BORDER | ES_MULTILINE | ES_READONLY | WS_VSCROLL,
-			300, 300, 1000, 1000, hWnd, (HMENU)ID_EDIT, g_hInst, NULL);
+			300, 300, 1000, 1000, hWnd, (HMENU)100, g_hInst, NULL);
 		break;
 
 	case WM_PAINT:
@@ -277,15 +274,30 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 	return 0;
 }
 
-LRESULT CALLBACK WndProc2(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam) {
-	switch (message) {
+LRESULT CALLBACK WndProc2(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam) {
+	switch (message)
+	{
+	case WM_CREATE:
+		childEdit1 = CreateWindow(L"edit", NULL, WS_CHILD | WS_VISIBLE | WS_BORDER | ES_MULTILINE | ES_READONLY | WS_VSCROLL,
+			50, 50, 600, 100, hWnd, (HMENU)100, g_hInst, NULL);
+		childEdit2 = CreateWindow(L"edit", NULL, WS_CHILD | WS_VISIBLE | WS_BORDER, 50, 200, 100, 50, hWnd, (HMENU)101, g_hInst, NULL);
+		childB1 = CreateWindow(L"button", L"Check", WS_CHILD | WS_VISIBLE | BS_PUSHBUTTON, 50, 250, 100, 25, hWnd, (HMENU)10, g_hInst, NULL);
+		break;
+	case WM_COMMAND:
+		switch (LOWORD(wParam))
+		{
+		case 10:
+			GetWindowText(childEdit2, buff, 1024);
+			SendMessage(childEdit1, WM_SETTEXT, 0, (LPARAM)buff);
+		}
+		break;
 	case WM_CLOSE:
 	case WM_DESTROY:
-		DestroyWindow(hwnd);
+		DestroyWindow(hWnd);
 		isNewWindowOpen = false;
 		break;
 	default:
-		return DefWindowProc(hwnd, message, wParam, lParam);
+		return DefWindowProc(hWnd, message, wParam, lParam);
 	}
 
 	return 0;
