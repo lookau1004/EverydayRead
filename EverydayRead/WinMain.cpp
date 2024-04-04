@@ -96,7 +96,7 @@ HRESULT InitWindow(HINSTANCE hInstance, int nCmdShow)
 	AdjustWindowRect(&rc, WS_OVERLAPPEDWINDOW, FALSE);
 
 	g_hInst = hInstance;
-	g_hwnd = CreateWindowW(TITLE, TITLE, WS_OVERLAPPEDWINDOW, CW_USEDEFAULT, CW_USEDEFAULT,
+	g_hwnd = CreateWindowW(TITLE, TITLE, WS_OVERLAPPEDWINDOW, 0, 0,
 		rc.right - rc.left, rc.bottom - rc.top, nullptr, nullptr, hInstance, nullptr);
 
 	if (!g_hwnd)
@@ -104,7 +104,7 @@ HRESULT InitWindow(HINSTANCE hInstance, int nCmdShow)
 		return E_FAIL;
 	}
 
-	ShowWindow(g_hwnd, nCmdShow);
+	ShowWindow(g_hwnd, SW_MAXIMIZE);
 
 	return S_OK;
 }
