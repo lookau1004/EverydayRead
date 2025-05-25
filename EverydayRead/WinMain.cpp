@@ -26,6 +26,13 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance
 	GetHtml getHtml(_link);
 	curlResult = getHtml.Load();
 
+	// CURL 실패시
+	if (curlResult == "404: Not Found")
+	{
+		MessageBoxA(g_hwnd, "Raw 데이터 다운로드 실패", "ERROR", MB_OK);
+		return 0;
+	}
+
 	// nlohmann Json으로 문장 파싱
 	jsonParse.Init(curlResult, sentences, "cppguidelines");
 	sentences = jsonParse.GetVector();
@@ -308,7 +315,7 @@ LRESULT CALLBACK WndProc2(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 			GetWindowText(childEdit2, buff, 1024);
 			answerValue = _wtoi(buff);				// wchar 배열에 저장된 total 값 변환
 
-			if (answerValue = resultValue)			// 계산한 답이 맞으면
+			if (answerValue == resultValue)			// 계산한 답이 맞으면
 			{
 				EnableWindow(childB1, true);
 				EnableWindow(childB2, false);
