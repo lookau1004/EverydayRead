@@ -26,6 +26,13 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance
 	GetHtml getHtml(_link);
 	curlResult = getHtml.Load();
 
+	// CURL 실패시
+	if (curlResult == "404: Not Found")
+	{
+		MessageBoxA(g_hwnd, "Raw 데이터 다운로드 실패", "ERROR", MB_OK);
+		return 0;
+	}
+
 	// nlohmann Json으로 문장 파싱
 	jsonParse.Init(curlResult, sentences, "cppguidelines");
 	sentences = jsonParse.GetVector();
